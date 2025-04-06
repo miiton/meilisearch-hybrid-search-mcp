@@ -49,12 +49,3 @@ This tool performs a hybrid search on the configured Meilisearch index.
     *   `0.5`: Balanced keyword and semantic search.
 *   `filterable_attribute` (string, optional): The attribute name to filter results on (e.g., "genre", "author"). Requires `filter_word`.
 *   `filter_word` (string, optional): The value to filter the specified `filterable_attribute` by (e.g., "Drama", "Tolkien"). Requires `filterable_attribute`.
-
-## Available Prompts
-
-These prompts provide guidance on using the `hybrid_search` tool effectively.
-
-*   **`adjust_semantic_ratio`**: Provides guidance on how to adjust the `semantic_ratio` parameter based on your search goal (keyword-focused, semantic-focused, or balanced).
-    *   **Usage:** `prompts/get(name="adjust_semantic_ratio", arguments={"search_type": "semantic"})` (Replace "semantic" with "keyword" or omit for balanced guidance).
-*   **`hybrid_search_help`**: Offers a general overview of the `hybrid_search` tool, including basic usage, semantic ratio adjustment, and filtering.
-    *   **Usage:** `prompts/get(name="hybrid_search_help")`

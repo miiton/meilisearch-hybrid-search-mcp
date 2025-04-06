@@ -46,7 +46,7 @@ func main() {
 			mcp.Description("Keywords to search for"),
 		),
 		mcp.WithNumber("semantic_ratio",
-			mcp.Description("Semantic ratio"),
+			mcp.Description("A value closer to 0 emphasizes keyword search, while closer to 1 emphasizes vector search. Default is 0.5. If the `_rankingScore` in results is low, try adjusting to 0.8 or 0.2 to find more relevant documents"),
 			mcp.DefaultNumber(0.5),
 			mcp.Min(0.0),
 			mcp.Max(1.0),
@@ -125,7 +125,8 @@ func main() {
 				SemanticRatio: semanticRatio,
 				Embedder:      meiliEmbedder,
 			},
-			Filter: filterExpr, // Add the constructed filter expression (will be empty if no valid filter args)
+			Filter:           filterExpr,
+			ShowRankingScore: true,
 		}
 
 		searchRes, err := index.Search(keywords, searchReq)
@@ -133,16 +134,13 @@ func main() {
 			return nil, fmt.Errorf("meilisearch search failed: %w", err)
 		}
 
-		jsonResult, err := json.Marshal(searchRes)
+		jsonResult, err := json.Marshal(searchRes.Hits)
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal search result to JSON: %w", err)
 		}
 
 		return mcp.NewToolResultText(string(jsonResult)), nil
 	})
-
-	// Register prompts before starting the server
-	registerPrompts(s)
 
 	if err := server.ServeStdio(s); err != nil {
 		fmt.Printf("Server error: %v\n", err)
